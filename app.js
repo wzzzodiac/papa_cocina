@@ -23,27 +23,27 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db  = getFirestore(app);
+const db = getFirestore(app);
 const recipesCol = collection(db, "recipes");
 
 // =======================
-//  Referencias DOM
+//  DOM
 // =======================
-const nameInput    = document.getElementById("name");
-const ingInput     = document.getElementById("ingredients");
-const filterInput  = document.getElementById("filter");
+const nameInput = document.getElementById("name");
+const ingInput = document.getElementById("ingredients");
+const filterInput = document.getElementById("filter");
 
-const addBtn       = document.getElementById("addBtn");
-const suggestBtn   = document.getElementById("suggestBtn");
+const addBtn = document.getElementById("addBtn");
+const suggestBtn = document.getElementById("suggestBtn");
 
-const resultBlock   = document.getElementById("resultBlock");
-const resultIcon    = document.getElementById("resultIcon");
-const resultTitle   = document.getElementById("resultTitle");
-const resultCategory= document.getElementById("resultCategory");
+const resultBlock = document.getElementById("resultBlock");
+const resultIcon = document.getElementById("resultIcon");
+const resultTitle = document.getElementById("resultTitle");
+const resultCategory = document.getElementById("resultCategory");
 const resultMessage = document.getElementById("resultMessage");
 
-const favBtn         = document.getElementById("favBtn");
-const favoritesList  = document.getElementById("favoritesList");
+const favBtn = document.getElementById("favBtn");
+const favoritesList = document.getElementById("favoritesList");
 const favoritesEmpty = document.getElementById("favoritesEmpty");
 
 // =======================
@@ -53,9 +53,8 @@ let lastSuggestedRecipe = null;
 let favorites = [];
 
 // =======================
-//  Helpers de favoritos
+//  Favoritos helpers
 // =======================
-
 function loadFavorites() {
   try {
     const raw = localStorage.getItem("papaCocinaFavorites");
@@ -70,6 +69,10 @@ function saveFavorites() {
   localStorage.setItem("papaCocinaFavorites", JSON.stringify(favorites));
 }
 
+function isFavorite(name) {
+  return favorites.some((f) => f.name === name);
+}
+
 function renderFavorites() {
   favoritesList.innerHTML = "";
 
@@ -79,7 +82,7 @@ function renderFavorites() {
   }
   favoritesEmpty.style.display = "none";
 
-  favorites.forEach(f => {
+  favorites.forEach((f) => {
     const li = document.createElement("li");
     li.className = "fav-li";
 
@@ -90,14 +93,16 @@ function renderFavorites() {
     const spanText = document.createElement("span");
     spanText.textContent = f.name;
 
+    const removeBtn = document.createElement("button");
+    removeBtn.className = "fav-remove";
+    removeBtn.textContent = "✕";
+    removeBtn.dataset.name = f.name;
+
     li.appendChild(spanIcon);
     li.appendChild(spanText);
+    li.appendChild(removeBtn);
     favoritesList.appendChild(li);
   });
-}
-
-function isFavorite(name) {
-  return favorites.some(f => f.name === name);
 }
 
 function updateFavButton() {
@@ -119,9 +124,9 @@ function toggleFavorite() {
   const { name } = lastSuggestedRecipe;
   const { icon } = getCategoryAndIcon(lastSuggestedRecipe);
 
-  const idx = favorites.findIndex(f => f.name === name);
+  const idx = favorites.findIndex((f) => f.name === name);
   if (idx >= 0) {
-    favorites.splice(idx, 1);      // quitar
+    favorites.splice(idx, 1); // quitar
   } else {
     favorites.push({ name, icon }); // añadir
   }
@@ -130,32 +135,45 @@ function toggleFavorite() {
   updateFavButton();
 }
 
+// botón corazón
 favBtn.addEventListener("click", toggleFavorite);
+
+// borrar favorito con la X
+favoritesList.addEventListener("click", (e) => {
+  if (!e.target.classList.contains("fav-remove")) return;
+
+  const name = e.target.dataset.name;
+  const idx = favorites.findIndex((f) => f.name === name);
+  if (idx >= 0) {
+    favorites.splice(idx, 1);
+    saveFavorites();
+    renderFavorites();
+    if (lastSuggestedRecipe && lastSuggestedRecipe.name === name) {
+      updateFavButton();
+    }
+  }
+});
 
 // =======================
 //  Categoría + icono
 // =======================
 function getCategoryAndIcon(recipe) {
   const name = (recipe.name || "").toLowerCase();
-  const ing  = Array.isArray(recipe.ingredients) ? recipe.ingredients : [];
+  const ing = Array.isArray(recipe.ingredients) ? recipe.ingredients : [];
   const text = name + " " + ing.join(" ");
 
   if (/ceviche|mariscos|pescado|pulpo|choritos|jalea|parihuela|tiradito/.test(text)) {
     return { category: "Marino", icon: "🐟" };
   }
-
   if (/sopa|caldo|aguadito|chupe|menestrón|sancochado|inchicapi|shámbar/.test(text)) {
     return { category: "Sopa / caldo", icon: "🍲" };
   }
-
   if (/tallarín|fideos|pasta/.test(text)) {
     return { category: "Pasta", icon: "🍝" };
   }
-
   if (/arroz/.test(text)) {
     return { category: "Arroz", icon: "🍚" };
   }
-
   return { category: "Criollo", icon: "🍽️" };
 }
 
@@ -175,8 +193,8 @@ addBtn.addEventListener("click", async () => {
   if (ingrText.length > 0) {
     ingredients = ingrText
       .split(",")
-      .map(x => x.trim().toLowerCase())
-      .filter(x => x.length > 0);
+      .map((x) => x.trim().toLowerCase())
+      .filter((x) => x.length > 0);
   }
 
   try {
@@ -203,34 +221,36 @@ suggestBtn.addEventListener("click", async () => {
 
   try {
     const snapshot = await getDocs(recipesCol);
-    const recipes = snapshot.docs.map(doc => doc.data());
+    const recipes = snapshot.docs.map((doc) => doc.data());
 
     let candidates = recipes;
 
     if (filterText.length > 0) {
       const filterIngredients = filterText
         .split(",")
-        .map(x => x.trim().toLowerCase())
-        .filter(x => x.length > 0);
+        .map((x) => x.trim().toLowerCase())
+        .filter((x) => x.length > 0);
 
-      candidates = recipes.filter(r =>
-        Array.isArray(r.ingredients) &&
-        r.ingredients.length > 0 &&
-        filterIngredients.every(fi => r.ingredients.includes(fi))
+      candidates = recipes.filter(
+        (r) =>
+          Array.isArray(r.ingredients) &&
+          r.ingredients.length > 0 &&
+          filterIngredients.every((fi) => r.ingredients.includes(fi))
       );
     }
 
     if (!candidates.length) {
-      resultMessage.textContent = "No encontré ningún plato con esos ingredientes 😢";
+      resultMessage.textContent =
+        "No encontré ningún plato con esos ingredientes 😢";
       return;
     }
 
-    // -------- ruleta visual --------
+    // ruleta visual
     suggestBtn.disabled = true;
     resultBlock.hidden = false;
 
     let count = 0;
-    const maxCycles = 12;   // vueltas de la ruleta
+    const maxCycles = 12;
     const interval = setInterval(() => {
       const tmp = candidates[Math.floor(Math.random() * candidates.length)];
       resultTitle.textContent = "Tal vez: " + tmp.name;
@@ -241,21 +261,20 @@ suggestBtn.addEventListener("click", async () => {
       if (count >= maxCycles) {
         clearInterval(interval);
 
-        // resultado final
-        const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+        const chosen =
+          candidates[Math.floor(Math.random() * candidates.length)];
         lastSuggestedRecipe = chosen;
         const info = getCategoryAndIcon(chosen);
 
-        resultTitle.textContent    = "Plato sugerido: " + chosen.name;
+        resultTitle.textContent = "Plato sugerido: " + chosen.name;
         resultCategory.textContent = "Categoría: " + info.category;
-        resultIcon.textContent     = info.icon;
-        resultMessage.textContent  = "";
+        resultIcon.textContent = info.icon;
+        resultMessage.textContent = "";
 
         suggestBtn.disabled = false;
         updateFavButton();
       }
     }, 80);
-
   } catch (err) {
     console.error(err);
     resultMessage.textContent = "Error al buscar platos :(";
@@ -267,4 +286,3 @@ suggestBtn.addEventListener("click", async () => {
 // =======================
 loadFavorites();
 updateFavButton();
-
