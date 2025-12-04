@@ -1,38 +1,46 @@
 <!doctype html>
-
 <html lang="es">
 <head>
   <meta charset="utf-8" />
+
   <!-- Favicon -->
-    <link rel="icon" type="image/png" href="zafra_chef.png" />
-  
+  <link rel="icon" type="image/png" href="zafra_chef.png" />
+
   <title>¿Qué cocinamos mañana?</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- CSS -->
   <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
   <div class="container">
+
+    <!-- TÍTULO PRINCIPAL -->
     <h1 class="title-with-icon-double">
-    <img src="zafra_chef.png" alt="chef" class="title-icon">
-    ¿Qué cocinamos mañana?
-    <img src="zafra_chef.png" alt="chef" class="title-icon">
+      <img src="zafra_chef.png" alt="chef" class="title-icon">
+      ¿Qué cocinamos mañana?
+      <img src="zafra_chef.png" alt="chef" class="title-icon">
     </h1>
 
-      <!-- Toggle de tema, debajo del título -->
+    <!-- BOTÓN MODO OSCURO -->
     <div class="theme-toggle-wrapper">
       <button id="themeToggle" class="theme-toggle">🌙 Modo oscuro</button>
     </div>
 
-    <!-- BUSCAR PLATO -->
+    <!-- ========================= -->
+    <!--      BUSCAR PLATO         -->
+    <!-- ========================= -->
     <section class="box">
       <h2>Buscar plato</h2>
-      <input
-        id="filter"
+
+      <input id="filter"
         placeholder="Click en 'Sugerir Plato' o menciona tus ingredientes aquí"
       />
+
       <button id="suggestBtn">Sugerir plato</button>
 
-      <!-- Resultado + favorito -->
+      <!-- RESULTADO -->
       <div class="result-block" id="resultBlock" hidden>
         <div class="result-icon" id="resultIcon">🍽️</div>
 
@@ -41,56 +49,64 @@
           <div class="result-category" id="resultCategory"></div>
         </div>
 
+        <!-- Botón de favorito -->
         <button class="fav-btn" id="favBtn" title="Añadir a favoritos">♡</button>
       </div>
 
-      <!-- Bloque de IA -->
-<div class="ai-block" id="aiBlock" hidden>
-  <div class="ai-buttons">
-    <button type="button" id="aiTipsBtn" class="ai-btn">
-      💡 Tips de cocina (IA)
-    </button>
-    <button type="button" id="aiVideoBtn" class="ai-btn secondary">
-      🎬 Ver videos en YouTube
-    </button>
-  </div>
-  <div class="ai-output" id="aiOutput">
-    <!-- Aquí aparecerán los tips -->
-  </div>
-</div>
+      <!-- ========================= -->
+      <!--       BLOQUE DE IA       -->
+      <!-- ========================= -->
+      <div id="aiBlock" class="box ai-box" hidden>
+        <h2>Ayuda con IA</h2>
+
+        <p id="aiOutput" class="ai-output">
+          Aquí verás tips de cocina, tiempos, trucos o videos sugeridos para el plato.
+        </p>
+
+        <div class="ai-actions">
+          <button id="aiTipsBtn" type="button">🧠 Tips de cocina</button>
+          <button id="aiVideoBtn" type="button">📺 Ver video de preparación</button>
+        </div>
+      </div>
 
       <p id="resultMessage" class="result-message">
         Haz clic en "Sugerir plato" o escribe algunos ingredientes.
       </p>
     </section>
 
-    <!-- AÑADIR PLATO -->
+    <!-- ========================= -->
+    <!--     AÑADIR NUEVO PLATO    -->
+    <!-- ========================= -->
     <section class="box">
       <h2>Añadir nuevo plato</h2>
-      <input
-        id="name"
+
+      <input id="name"
         placeholder="Nombre del plato (ej: Aji de gallina)"
       />
-      <input
-        id="ingredients"
+
+      <input id="ingredients"
         placeholder="Opcional: Ingredientes / palabras clave (pollo, papa)"
       />
+
       <button id="addBtn">Añadir</button>
     </section>
 
-    <!-- FAVORITOS -->
+    <!-- ========================= -->
+    <!--         FAVORITOS         -->
+    <!-- ========================= -->
     <section class="box">
       <h2>Favoritos</h2>
+
       <ul id="favoritesList" class="fav-list"></ul>
+
       <p id="favoritesEmpty" class="fav-empty">
         Todavía no has marcado ningún favorito.
       </p>
     </section>
+
   </div>
 
-  <!-- nota: cambia v=1 -> v=2, v=3 cuando actualices app.js para evitar caché -->
+  <!-- APP JS (usa versionado para evitar caché) -->
   <script type="module" src="app.js?v=5"></script>
 </body>
 </html>
-
-
