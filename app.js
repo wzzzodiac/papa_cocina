@@ -46,6 +46,10 @@ const favBtn = document.getElementById("favBtn");
 const favoritesList = document.getElementById("favoritesList");
 const favoritesEmpty = document.getElementById("favoritesEmpty");
 
+const aiBlock   = document.getElementById("aiBlock");
+const aiOutput  = document.getElementById("aiOutput");
+const aiTipsBtn = document.getElementById("aiTipsBtn");
+const aiVideoBtn = document.getElementById("aiVideoBtn");
 // =======================
 //  Estado
 // =======================
@@ -304,6 +308,59 @@ themeToggle.addEventListener("click", () => {
 
 applyTheme();
 
+// ===== IA: FRONTEND =====
+
+// PONDRÁS AQUÍ LA URL DE LA CLOUD FUNCTION LUEGO:
+const AI_ENDPOINT = "https://TU-URL-DE-FIREBASE-AQUI/aiTips";
+
+async function loadAiTipsForDish(dishName) {
+  aiBlock.hidden = false;
+  aiOutput.textContent = "Generando tips con IA...";
+
+  try {
+    const res = await fetch(AI_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ dish: dishName })
+    });
+
+    if (!res.ok) {
+      throw new Error("Respuesta no OK: " + res.status);
+    }
+
+    const data = await res.json();
+    aiOutput.textContent = data.tips || "No se recibieron tips.";
+  } catch (err) {
+    console.error(err);
+    aiOutput.textContent =
+      "Hubo un problema al pedir los tips de cocina. Intenta de nuevo.";
+  }
+}
+
+// botón de tips IA
+aiTipsBtn.addEventListener("click", () => {
+  if (!lastSuggestedRecipe) {
+    aiOutput.textContent = "Primero pide un plato sugerido.";
+    aiBlock.hidden = false;
+    return;
+  }
+  loadAiTipsForDish(lastSuggestedRecipe.name);
+});
+
+// botón de videos (por ahora: búsqueda en YouTube)
+aiVideoBtn.addEventListener("click", () => {
+  if (!lastSuggestedRecipe) {
+    aiOutput.textContent = "Primero pide un plato sugerido.";
+    aiBlock.hidden = false;
+    return;
+  }
+
+  const q = encodeURIComponent(
+    `${lastSuggestedRecipe.name} receta peruana`
+  );
+  const url = `https://www.youtube.com/results?search_query=${q}`;
+  window.open(url, "_blank");
+});
 
 // =======================
 //  init
