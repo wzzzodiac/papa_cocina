@@ -222,4 +222,71 @@ button:active {
   color: #e53935;
 }
 
+/* BOTÓN DE MODO OSCURO */
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  background: #fff7eb;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 9999;
+}
 
+.theme-toggle:hover {
+  background: #ffe2bd;
+}
+
+/* ===========================
+   📌 DARK MODE
+   ===========================*/
+body.dark {
+  background: #1d1d1d !important;
+  color: #fcefdc;
+}
+
+body.dark .box {
+  background: #2a2a2a;
+  color: #fcefdc;
+  border: 1px solid #3d3d3d;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+body.dark input {
+  background: #333;
+  border: 1px solid #555;
+  color: #fff;
+}
+
+body.dark input:focus {
+  border-color: #ffa75a;
+  box-shadow: 0 0 0 3px rgba(255, 154, 54, 0.4);
+}
+
+body.dark .result-block {
+  background: #2a2a2a;
+  border-color: #555;
+}
+
+body.dark .fav-li {
+  background: #333;
+  color: #fff;
+}
+
+body.dark .fav-li:hover {
+  background: #444;
+}
+
+body.dark .fav-btn {
+  background: #444;
+  color: #ff9999;
+}
+
+body.dark .fav-btn.fav-on {
+  background: #cc3333;
+  color: #fff;
+}
