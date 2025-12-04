@@ -8,10 +8,7 @@ import {
   addDoc,
   getDocs
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-import {
-  getFunctions,
-  httpsCallable
-} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-functions.js";
+
 
 // =======================
 //  Config de Firebase
@@ -30,9 +27,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const recipesCol = collection(db, "recipes");
 
-// Firebase Functions
-const functions = getFunctions(app);
-const aiTipsFn = httpsCallable(functions, "aiTips");
+
 
 // =======================
 //  DOM
@@ -341,12 +336,22 @@ async function askAi(mode) {
     'Consultando a la IA para "' + lastSuggestedRecipe.name + '"...';
 
   try {
-    const result = await aiTipsFn({
-      dishName: lastSuggestedRecipe.name,
-      mode: mode   // "video" o "tips"
+    const res = await fetch(AI_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        dishName: lastSuggestedRecipe.name,
+        mode: mode // "video" o "tips"
+      })
     });
 
-    const text = result.data.text || "(Sin respuesta)";
+    if (!res.ok) {
+      throw new Error("HTTP status " + res.status);
+    }
+
+    const data = await res.json();
+    // En tu Cloud Function devolvemos { text: "..." }
+    const text = data.text || data.tips || "(Sin respuesta de la IA)";
     aiOutput.textContent = text;
   } catch (err) {
     console.error("Error llamando a aiTips:", err);
@@ -354,6 +359,7 @@ async function askAi(mode) {
       "La IA está ocupada ahora mismo 😅. Intenta otra vez.";
   }
 }
+
 
 if (aiTipsBtn) {
   aiTipsBtn.addEventListener("click", () => {
