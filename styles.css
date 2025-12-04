@@ -172,7 +172,7 @@ button:active {
 .fav-list {
   list-style: none;
   padding-left: 0;
-  margin: 8px 0 0 0;
+  margin: 10px 0 0 0;
 }
 
 .fav-li {
@@ -180,7 +180,19 @@ button:active {
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  padding: 4px 0;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #fffaf0;
+  margin-bottom: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: background .15s ease, transform .1s ease,
+              box-shadow .15s ease;
+}
+
+.fav-li:hover {
+  background: #ffe9c5;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.12);
 }
 
 .fav-li-icon {
@@ -196,6 +208,7 @@ button:active {
 /* Botón X para quitar favorito */
 
 .fav-remove {
+  all: unset;
   margin-left: auto;
   border: none;
   background: transparent;
