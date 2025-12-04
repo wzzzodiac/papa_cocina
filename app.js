@@ -236,3 +236,25 @@ suggestBtn.addEventListener("click", async () => {
 // ----- init -----
 loadFavorites();
 updateFavButton();
+
+// --- CLICK EN UN FAVORITO PARA MOSTRAR ARRIBA ---
+document.getElementById("favoritos-lista").addEventListener("click", (e) => {
+    if (!e.target.classList.contains("fav-item")) return;
+
+    const plato = e.target.dataset.name;
+    const categoria = e.target.dataset.cat;
+
+    mostrarPlatoSugerido(plato, categoria, true);
+});
+
+// --- FUNCIÓN EXTRA PARA ANIMACIÓN ---
+function mostrarPlatoSugerido(nombre, categoria, animar = false) {
+    const resultado = document.getElementById("resultado-sugerencia");
+    resultado.innerHTML = `
+        <div class="plato-card ${animar ? "animate-pop" : ""}">
+            <div class="icon">${iconoPorCategoria(categoria)}</div>
+            <h3>${nombre}</h3>
+            <p class="categoria">${categoria}</p>
+        </div>
+    `;
+}
