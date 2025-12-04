@@ -1,55 +1,66 @@
-<!DOCTYPE html>
+<<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Qué cocinar</title>
+  <meta charset="utf-8" />
+  <title>¿Qué cocinamos mañana?</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" href="https://avatars.githubusercontent.com/u/46037018?v=4">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-
   <div class="container">
-  <h1>¿Qué cocinamos mañana?</h1>
+    <h1>¿Qué cocinamos mañana?</h1>
 
-  <!-- BUSCAR PLATO -->
-  <div class="box">
-    <h2>Buscar plato</h2>
-    <input id="filter" placeholder="Click en 'Sugerir Plato' o menciona tus ingredientes.">
-    <button id="suggestBtn">Sugerir plato</button>
+    <!-- BUSCAR PLATO -->
+    <section class="box">
+      <h2>Buscar plato</h2>
+      <input
+        id="filter"
+        placeholder="Click en 'Sugerir Plato' o menciona tus ingredientes aquí"
+      />
+      <button id="suggestBtn">Sugerir plato</button>
 
-    <!-- Resultado con icono + fav -->
-    <div class="result-block" id="resultBlock" hidden>
-      <div class="result-icon" id="resultIcon">🍽️</div>
-      <div class="result-texts">
-        <div class="result-title" id="resultTitle"></div>
-        <div class="result-category" id="resultCategory"></div>
+      <!-- Resultado + favorito -->
+      <div class="result-block" id="resultBlock" hidden>
+        <div class="result-icon" id="resultIcon">🍽️</div>
+
+        <div class="result-texts">
+          <div class="result-title" id="resultTitle"></div>
+          <div class="result-category" id="resultCategory"></div>
+        </div>
+
+        <button class="fav-btn" id="favBtn" title="Añadir a favoritos">♡</button>
       </div>
-      <button class="fav-btn" id="favBtn" onclick="toggleFavorite(lastSuggestedRecipe.name)">
-    ☆ Añadir a favoritos
-</button>
-    </div>
 
-    <p id="resultMessage" class="result-message"></p>
+      <p id="resultMessage" class="result-message">
+        Haz clic en "Sugerir plato" o escribe algunos ingredientes.
+      </p>
+    </section>
+
+    <!-- AÑADIR PLATO -->
+    <section class="box">
+      <h2>Añadir nuevo plato</h2>
+      <input
+        id="name"
+        placeholder="Nombre del plato (ej: Aji de gallina)"
+      />
+      <input
+        id="ingredients"
+        placeholder="Opcional: Ingredientes / palabras clave (pollo, papa)"
+      />
+      <button id="addBtn">Añadir</button>
+    </section>
+
+    <!-- FAVORITOS -->
+    <section class="box">
+      <h2>Favoritos</h2>
+      <ul id="favoritesList" class="fav-list"></ul>
+      <p id="favoritesEmpty" class="fav-empty">
+        Todavía no has marcado ningún favorito.
+      </p>
+    </section>
   </div>
 
-  <!-- AÑADIR PLATO -->
-  <div class="box">
-    <h2>Añadir nuevo plato</h2>
-    <input id="name" placeholder="Nombre del plato (ej: Aji de gallina)">
-    <input id="ingredients" placeholder="Opcional: Ingredientes / palabras clave (pollo, papa)">
-    <button id="addBtn">Añadir</button>
-  </div>
-
-  <!-- FAVORITOS -->
-  <div class="box">
-    <h2>Favoritos</h2>
-    <ul id="favoritesList" class="fav-list"></ul>
-    <p id="favoritesEmpty" class="fav-empty">Todavía no has marcado ningún favorito.</p>
-  </div>
-</div>
-
+  <!-- nota: cambia v=1 -> v=2, v=3 cuando actualices app.js para evitar caché -->
   <script type="module" src="app.js?v=1"></script>
 </body>
 </html>
-
