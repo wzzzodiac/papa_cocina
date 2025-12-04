@@ -1,3 +1,6 @@
+// =======================
+//  Firebase imports
+// =======================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
 import {
   getFirestore,
@@ -6,7 +9,9 @@ import {
   getDocs
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-// Config de tu Firebase
+// =======================
+//  Config de Firebase
+// =======================
 const firebaseConfig = {
   apiKey: "AIzaSyC9AfSi-sI1EWP6bp1NBI-z0Cmap_nE7c",
   authDomain: "papa-cocina.firebaseapp.com",
@@ -21,10 +26,13 @@ const app = initializeApp(firebaseConfig);
 const db  = getFirestore(app);
 const recipesCol = collection(db, "recipes");
 
-// DOM
+// =======================
+//  Referencias DOM
+// =======================
 const nameInput    = document.getElementById("name");
 const ingInput     = document.getElementById("ingredients");
 const filterInput  = document.getElementById("filter");
+
 const addBtn       = document.getElementById("addBtn");
 const suggestBtn   = document.getElementById("suggestBtn");
 
@@ -38,11 +46,15 @@ const favBtn         = document.getElementById("favBtn");
 const favoritesList  = document.getElementById("favoritesList");
 const favoritesEmpty = document.getElementById("favoritesEmpty");
 
-// Estado
+// =======================
+//  Estado
+// =======================
 let lastSuggestedRecipe = null;
 let favorites = [];
 
-// ---------- Helpers de favoritos ----------
+// =======================
+//  Helpers de favoritos
+// =======================
 
 function loadFavorites() {
   try {
@@ -60,6 +72,7 @@ function saveFavorites() {
 
 function renderFavorites() {
   favoritesList.innerHTML = "";
+
   if (!favorites.length) {
     favoritesEmpty.style.display = "block";
     return;
@@ -68,6 +81,8 @@ function renderFavorites() {
 
   favorites.forEach(f => {
     const li = document.createElement("li");
+    li.className = "fav-li";
+
     const spanIcon = document.createElement("span");
     spanIcon.className = "fav-li-icon";
     spanIcon.textContent = f.icon || "🍽️";
@@ -92,6 +107,7 @@ function updateFavButton() {
     favBtn.textContent = "♡";
     return;
   }
+
   favBtn.disabled = false;
   const on = isFavorite(lastSuggestedRecipe.name);
   favBtn.classList.toggle("fav-on", on);
@@ -105,9 +121,9 @@ function toggleFavorite() {
 
   const idx = favorites.findIndex(f => f.name === name);
   if (idx >= 0) {
-    favorites.splice(idx, 1);
+    favorites.splice(idx, 1);      // quitar
   } else {
-    favorites.push({ name, icon });
+    favorites.push({ name, icon }); // añadir
   }
   saveFavorites();
   renderFavorites();
@@ -116,30 +132,36 @@ function toggleFavorite() {
 
 favBtn.addEventListener("click", toggleFavorite);
 
-// ---------- Categoría + icono ----------
-
+// =======================
+//  Categoría + icono
+// =======================
 function getCategoryAndIcon(recipe) {
   const name = (recipe.name || "").toLowerCase();
   const ing  = Array.isArray(recipe.ingredients) ? recipe.ingredients : [];
   const text = name + " " + ing.join(" ");
 
-  if (/ceviche|mariscos|pescado|pulpo|choritos|jalea|parihuela|tiradito/.test(text))
+  if (/ceviche|mariscos|pescado|pulpo|choritos|jalea|parihuela|tiradito/.test(text)) {
     return { category: "Marino", icon: "🐟" };
+  }
 
-  if (/sopa|caldo|aguadito|chupe|menestrón|sancochado|inchicapi|shámbar/.test(text))
+  if (/sopa|caldo|aguadito|chupe|menestrón|sancochado|inchicapi|shámbar/.test(text)) {
     return { category: "Sopa / caldo", icon: "🍲" };
+  }
 
-  if (/tallarín|fideos|pasta/.test(text))
+  if (/tallarín|fideos|pasta/.test(text)) {
     return { category: "Pasta", icon: "🍝" };
+  }
 
-  if (/arroz/.test(text))
+  if (/arroz/.test(text)) {
     return { category: "Arroz", icon: "🍚" };
+  }
 
   return { category: "Criollo", icon: "🍽️" };
 }
 
-// ---------- Añadir plato ----------
-
+// =======================
+//  Añadir plato
+// =======================
 addBtn.addEventListener("click", async () => {
   const name = nameInput.value.trim();
   const ingrText = ingInput.value.trim();
@@ -168,10 +190,12 @@ addBtn.addEventListener("click", async () => {
   }
 });
 
-// ---------- Sugerir plato (con ruletita) ----------
-
+// =======================
+//  Sugerir plato (ruletita)
+// =======================
 suggestBtn.addEventListener("click", async () => {
   const filterText = filterInput.value.trim().toLowerCase();
+
   resultMessage.textContent = "";
   resultBlock.hidden = true;
   lastSuggestedRecipe = null;
@@ -201,27 +225,32 @@ suggestBtn.addEventListener("click", async () => {
       return;
     }
 
-    // Ruletita
+    // -------- ruleta visual --------
     suggestBtn.disabled = true;
     resultBlock.hidden = false;
+
     let count = 0;
-    const maxCycles = 12;   // cuántas vueltas más o menos
+    const maxCycles = 12;   // vueltas de la ruleta
     const interval = setInterval(() => {
       const tmp = candidates[Math.floor(Math.random() * candidates.length)];
       resultTitle.textContent = "Tal vez: " + tmp.name;
       resultCategory.textContent = "";
       resultIcon.textContent = "🎲";
       count++;
+
       if (count >= maxCycles) {
         clearInterval(interval);
+
         // resultado final
         const chosen = candidates[Math.floor(Math.random() * candidates.length)];
         lastSuggestedRecipe = chosen;
         const info = getCategoryAndIcon(chosen);
-        resultTitle.textContent = "Plato sugerido: " + chosen.name;
+
+        resultTitle.textContent    = "Plato sugerido: " + chosen.name;
         resultCategory.textContent = "Categoría: " + info.category;
-        resultIcon.textContent = info.icon;
-        resultMessage.textContent = "";
+        resultIcon.textContent     = info.icon;
+        resultMessage.textContent  = "";
+
         suggestBtn.disabled = false;
         updateFavButton();
       }
@@ -233,56 +262,8 @@ suggestBtn.addEventListener("click", async () => {
   }
 });
 
-// ----- init -----
+// =======================
+//  init
+// =======================
 loadFavorites();
 updateFavButton();
-
-// --- CLICK EN UN FAVORITO PARA MOSTRAR ARRIBA ---
-document.getElementById("favoritos-lista").addEventListener("click", (e) => {
-    if (!e.target.classList.contains("fav-item")) return;
-
-    const plato = e.target.dataset.name;
-    const categoria = e.target.dataset.cat;
-
-    mostrarPlatoSugerido(plato, categoria, true);
-});
-
-// --- FUNCIÓN EXTRA PARA ANIMACIÓN ---
-function mostrarPlatoSugerido(nombre, categoria, animar = false) {
-    const resultado = document.getElementById("resultado-sugerencia");
-    resultado.innerHTML = `
-        <div class="plato-card ${animar ? "animate-pop" : ""}">
-            <div class="icon">${iconoPorCategoria(categoria)}</div>
-            <h3>${nombre}</h3>
-            <p class="categoria">${categoria}</p>
-        </div>
-    `;
-}
-
-function toggleFavorite(recipeName) {
-  const favs = new Set(JSON.parse(localStorage.getItem("favorites") || "[]"));
-
-  if (favs.has(recipeName)) {
-    favs.delete(recipeName); // quitar
-  } else {
-    favs.add(recipeName); // agregar
-  }
-
-  localStorage.setItem("favorites", JSON.stringify([...favs]));
-  updateFavButton();
-}
-
-function updateFavButton() {
-  const favs = new Set(JSON.parse(localStorage.getItem("favorites") || "[]"));
-
-  if (!lastSuggestedRecipe) return;
-
-  if (favs.has(lastSuggestedRecipe.name)) {
-    favBtn.textContent = "★ Quitar de favoritos";
-    favBtn.classList.add("fav-active");
-  } else {
-    favBtn.textContent = "☆ Añadir a favoritos";
-    favBtn.classList.remove("fav-active");
-  }
-}
-
