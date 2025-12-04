@@ -223,20 +223,21 @@ button:active {
 }
 
 /* BOTÓN DE MODO OSCURO */
-.theme-toggle {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 8px 14px;
-  border-radius: 10px;
-  border: none;
-  background: #fff7eb;
-  cursor: pointer;
-  font-size: 14px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  z-index: 9999;
+.theme-toggle-wrapper {
+  text-align: center;      /* alínealo debajo del título */
+  margin-bottom: 10px;
 }
 
+.theme-toggle {
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255, 247, 235, 0.9);
+  cursor: pointer;
+  font-size: 13px;
+  color: #1f1306;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
 .theme-toggle:hover {
   background: #ffe2bd;
 }
