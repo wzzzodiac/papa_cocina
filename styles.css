@@ -178,3 +178,37 @@ button:active {
   color: #8a6d3b;
   margin-top: 4px;
 }
+
+.plato-card {
+    background: #fff7e6;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.1);
+    text-align: center;
+    transition: transform .3s ease, opacity .3s ease;
+}
+
+.animate-pop {
+    animation: popIn .35s ease forwards;
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0.6);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.fav-item {
+    cursor: pointer;
+    padding: 4px 0;
+    transition: color .2s;
+}
+
+.fav-item:hover {
+    color: #2ecc71;
+}
