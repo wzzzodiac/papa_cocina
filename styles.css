@@ -332,3 +332,37 @@ body.dark .theme-toggle:hover {
   background: #444;
 }
 
+/* ----- TEXTOS MODO OSCURO ----- */
+
+body.dark-mode {
+    color: #f1f1f1 !important;
+}
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6,
+body.dark-mode .title,
+body.dark-mode .section-title {
+    color: #ffffff !important;
+    text-shadow: 0 0 4px rgba(255,255,255,0.2);
+}
+
+/* textos dentro de cajas */
+body.dark-mode .section,
+body.dark-mode .favorite-item,
+body.dark-mode label,
+body.dark-mode p,
+body.dark-mode span,
+body.dark-mode .result-title,
+body.dark-mode .result-category {
+    color: #e6e6e6 !important;
+}
+
+/* inputs */
+body.dark-mode input {
+    color: #ffffff !important;
+}
+
