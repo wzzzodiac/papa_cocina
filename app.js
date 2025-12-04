@@ -1,4 +1,3 @@
-
 // =======================
 //  Firebase imports
 // =======================
@@ -9,7 +8,10 @@ import {
   addDoc,
   getDocs
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
+import {
+  getFunctions,
+  httpsCallable
+} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-functions.js";
 
 // =======================
 //  Config de Firebase
@@ -27,6 +29,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const recipesCol = collection(db, "recipes");
+
+// Firebase Functions
 const functions = getFunctions(app);
 const aiTipsFn = httpsCallable(functions, "aiTips");
 
@@ -50,10 +54,12 @@ const favBtn = document.getElementById("favBtn");
 const favoritesList = document.getElementById("favoritesList");
 const favoritesEmpty = document.getElementById("favoritesEmpty");
 
-const aiBlock   = document.getElementById("aiBlock");
-const aiOutput  = document.getElementById("aiOutput");
+// bloque de IA
+const aiBlock = document.getElementById("aiBlock");
+const aiOutput = document.getElementById("aiOutput");
 const aiTipsBtn = document.getElementById("aiTipsBtn");
 const aiVideoBtn = document.getElementById("aiVideoBtn");
+
 // =======================
 //  Estado
 // =======================
@@ -279,14 +285,12 @@ suggestBtn.addEventListener("click", async () => {
         resultIcon.textContent = info.icon;
         resultMessage.textContent = "";
 
+        // reset bloque IA cuando hay nuevo plato
         aiBlock.hidden = true;
         aiOutput.textContent = "";
-        
+
         suggestBtn.disabled = false;
         updateFavButton();
-
-
-
       }
     }, 80);
   } catch (err) {
@@ -318,92 +322,31 @@ themeToggle.addEventListener("click", () => {
 
 applyTheme();
 
-// ===== IA: FRONTEND =====
-
-// PONDRÁS AQUÍ LA URL DE LA CLOUD FUNCTION LUEGO:
-const AI_ENDPOINT = "https://TU-URL-DE-FIREBASE-AQUI/aiTips";
-
-async function loadAiTipsForDish(dishName) {
-  aiBlock.hidden = false;
-  aiOutput.textContent = "Generando tips con IA...";
-
-  try {
-    const res = await fetch(AI_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ dish: dishName })
-    });
-
-    if (!res.ok) {
-      throw new Error("Respuesta no OK: " + res.status);
-    }
-
-    const data = await res.json();
-    aiOutput.textContent = data.tips || "No se recibieron tips.";
-  } catch (err) {
-    console.error(err);
-    aiOutput.textContent =
-      "Hubo un problema al pedir los tips de cocina. Intenta de nuevo.";
-  }
-}
-
-// botón de tips IA
-aiTipsBtn.addEventListener("click", () => {
-  if (!lastSuggestedRecipe) {
-    aiOutput.textContent = "Primero pide un plato sugerido.";
-    aiBlock.hidden = false;
-    return;
-  }
-  loadAiTipsForDish(lastSuggestedRecipe.name);
-});
-
-// botón de videos (por ahora: búsqueda en YouTube)
-aiVideoBtn.addEventListener("click", () => {
-  if (!lastSuggestedRecipe) {
-    aiOutput.textContent = "Primero pide un plato sugerido.";
-    aiBlock.hidden = false;
-    return;
-  }
-
-  const q = encodeURIComponent(
-    `${lastSuggestedRecipe.name} receta peruana`
-  );
-  const url = `https://www.youtube.com/results?search_query=${q}`;
-  window.open(url, "_blank");
-});
-
+// ===== IA: FRONTEND (Cloud Function callable) =====
 async function askAi(mode) {
-  // 1) Validar que haya un plato sugerido
   if (!lastSuggestedRecipe) {
     aiBlock.hidden = false;
     aiOutput.textContent = "Primero deja que te sugiera un plato 😉";
     return;
   }
 
-  // 2) Mostrar el bloque IA y mensaje de carga
   aiBlock.hidden = false;
-  aiOutput.textContent = "Consultando a la IA para \"" + lastSuggestedRecipe.name + "\"...";
+  aiOutput.textContent =
+    'Consultando a la IA para "' + lastSuggestedRecipe.name + '"...';
 
   try {
-    // 3) Llamar a la función de Firebase
     const result = await aiTipsFn({
       dishName: lastSuggestedRecipe.name,
-      mode: mode,          // "video" o "tips"
+      mode: mode   // "video" o "tips"
     });
 
-    // 4) Mostrar respuesta
     const text = result.data.text || "(Sin respuesta)";
     aiOutput.textContent = text;
   } catch (err) {
     console.error("Error llamando a aiTips:", err);
-    aiOutput.textContent = "La IA está ocupada ahora mismo 😅. Intenta otra vez.";
+    aiOutput.textContent =
+      "La IA está ocupada ahora mismo 😅. Intenta otra vez.";
   }
-}
-
-if (aiVideoBtn) {
-  aiVideoBtn.addEventListener("click", () => {
-    askAi("video");
-  });
 }
 
 if (aiTipsBtn) {
@@ -412,6 +355,11 @@ if (aiTipsBtn) {
   });
 }
 
+if (aiVideoBtn) {
+  aiVideoBtn.addEventListener("click", () => {
+    askAi("video");
+  });
+}
 
 // =======================
 //  init
