@@ -1,4 +1,3 @@
-// Importar Firebase (SDK modular desde CDN)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
 import {
   getFirestore,
@@ -7,7 +6,7 @@ import {
   getDocs
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-// Config de tu proyecto (la que te dio Firebase)
+// Config de tu Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyC9AfSi-sI1EWP6bp1NBI-z0Cmap_nE7c",
   authDomain: "papa-cocina.firebaseapp.com",
@@ -18,20 +17,129 @@ const firebaseConfig = {
   measurementId: "G-BKJESVDY64"
 };
 
-// Inicializar Firebase y Firestore
 const app = initializeApp(firebaseConfig);
 const db  = getFirestore(app);
 const recipesCol = collection(db, "recipes");
 
-// Referencias al DOM
-const nameInput    = document.getElementById("name");         // nombre plato
-const ingInput     = document.getElementById("ingredients");  // ingredientes/tags
-const filterInput  = document.getElementById("filter");       // búsqueda
-const resultEl     = document.getElementById("result");       // texto resultado
+// DOM
+const nameInput    = document.getElementById("name");
+const ingInput     = document.getElementById("ingredients");
+const filterInput  = document.getElementById("filter");
 const addBtn       = document.getElementById("addBtn");
 const suggestBtn   = document.getElementById("suggestBtn");
 
-// =============== AÑADIR PLATO =================
+const resultBlock   = document.getElementById("resultBlock");
+const resultIcon    = document.getElementById("resultIcon");
+const resultTitle   = document.getElementById("resultTitle");
+const resultCategory= document.getElementById("resultCategory");
+const resultMessage = document.getElementById("resultMessage");
+
+const favBtn         = document.getElementById("favBtn");
+const favoritesList  = document.getElementById("favoritesList");
+const favoritesEmpty = document.getElementById("favoritesEmpty");
+
+// Estado
+let lastSuggestedRecipe = null;
+let favorites = [];
+
+// ---------- Helpers de favoritos ----------
+
+function loadFavorites() {
+  try {
+    const raw = localStorage.getItem("papaCocinaFavorites");
+    favorites = raw ? JSON.parse(raw) : [];
+  } catch {
+    favorites = [];
+  }
+  renderFavorites();
+}
+
+function saveFavorites() {
+  localStorage.setItem("papaCocinaFavorites", JSON.stringify(favorites));
+}
+
+function renderFavorites() {
+  favoritesList.innerHTML = "";
+  if (!favorites.length) {
+    favoritesEmpty.style.display = "block";
+    return;
+  }
+  favoritesEmpty.style.display = "none";
+
+  favorites.forEach(f => {
+    const li = document.createElement("li");
+    const spanIcon = document.createElement("span");
+    spanIcon.className = "fav-li-icon";
+    spanIcon.textContent = f.icon || "🍽️";
+
+    const spanText = document.createElement("span");
+    spanText.textContent = f.name;
+
+    li.appendChild(spanIcon);
+    li.appendChild(spanText);
+    favoritesList.appendChild(li);
+  });
+}
+
+function isFavorite(name) {
+  return favorites.some(f => f.name === name);
+}
+
+function updateFavButton() {
+  if (!lastSuggestedRecipe) {
+    favBtn.disabled = true;
+    favBtn.classList.remove("fav-on");
+    favBtn.textContent = "♡";
+    return;
+  }
+  favBtn.disabled = false;
+  const on = isFavorite(lastSuggestedRecipe.name);
+  favBtn.classList.toggle("fav-on", on);
+  favBtn.textContent = on ? "♥" : "♡";
+}
+
+function toggleFavorite() {
+  if (!lastSuggestedRecipe) return;
+  const { name } = lastSuggestedRecipe;
+  const { icon } = getCategoryAndIcon(lastSuggestedRecipe);
+
+  const idx = favorites.findIndex(f => f.name === name);
+  if (idx >= 0) {
+    favorites.splice(idx, 1);
+  } else {
+    favorites.push({ name, icon });
+  }
+  saveFavorites();
+  renderFavorites();
+  updateFavButton();
+}
+
+favBtn.addEventListener("click", toggleFavorite);
+
+// ---------- Categoría + icono ----------
+
+function getCategoryAndIcon(recipe) {
+  const name = (recipe.name || "").toLowerCase();
+  const ing  = Array.isArray(recipe.ingredients) ? recipe.ingredients : [];
+  const text = name + " " + ing.join(" ");
+
+  if (/ceviche|mariscos|pescado|pulpo|choritos|jalea|parihuela|tiradito/.test(text))
+    return { category: "Marino", icon: "🐟" };
+
+  if (/sopa|caldo|aguadito|chupe|menestrón|sancochado|inchicapi|shámbar/.test(text))
+    return { category: "Sopa / caldo", icon: "🍲" };
+
+  if (/tallarín|fideos|pasta/.test(text))
+    return { category: "Pasta", icon: "🍝" };
+
+  if (/arroz/.test(text))
+    return { category: "Arroz", icon: "🍚" };
+
+  return { category: "Criollo", icon: "🍽️" };
+}
+
+// ---------- Añadir plato ----------
+
 addBtn.addEventListener("click", async () => {
   const name = nameInput.value.trim();
   const ingrText = ingInput.value.trim();
@@ -41,7 +149,6 @@ addBtn.addEventListener("click", async () => {
     return;
   }
 
-  // Ingredientes / tags opcionales
   let ingredients = [];
   if (ingrText.length > 0) {
     ingredients = ingrText
@@ -51,11 +158,7 @@ addBtn.addEventListener("click", async () => {
   }
 
   try {
-    await addDoc(recipesCol, {
-      name,
-      ingredients   // puede ser [] si no escribió nada
-    });
-
+    await addDoc(recipesCol, { name, ingredients });
     nameInput.value = "";
     ingInput.value = "";
     alert("Plato añadido ✔");
@@ -65,9 +168,14 @@ addBtn.addEventListener("click", async () => {
   }
 });
 
-// =============== BUSCAR / SUGERIR PLATO =================
+// ---------- Sugerir plato (con ruletita) ----------
+
 suggestBtn.addEventListener("click", async () => {
   const filterText = filterInput.value.trim().toLowerCase();
+  resultMessage.textContent = "";
+  resultBlock.hidden = true;
+  lastSuggestedRecipe = null;
+  updateFavButton();
 
   try {
     const snapshot = await getDocs(recipesCol);
@@ -81,7 +189,6 @@ suggestBtn.addEventListener("click", async () => {
         .map(x => x.trim().toLowerCase())
         .filter(x => x.length > 0);
 
-      // Solo filtra en recetas que tengan array de ingredientes
       candidates = recipes.filter(r =>
         Array.isArray(r.ingredients) &&
         r.ingredients.length > 0 &&
@@ -89,18 +196,43 @@ suggestBtn.addEventListener("click", async () => {
       );
     }
 
-    if (candidates.length === 0) {
-      resultEl.textContent = "No encontré ningún plato con esos ingredientes 😢";
+    if (!candidates.length) {
+      resultMessage.textContent = "No encontré ningún plato con esos ingredientes 😢";
       return;
     }
 
-    const random = candidates[Math.floor(Math.random() * candidates.length)];
-    resultEl.textContent = "Plato sugerido: " + random.name;
+    // Ruletita
+    suggestBtn.disabled = true;
+    resultBlock.hidden = false;
+    let count = 0;
+    const maxCycles = 12;   // cuántas vueltas más o menos
+    const interval = setInterval(() => {
+      const tmp = candidates[Math.floor(Math.random() * candidates.length)];
+      resultTitle.textContent = "Tal vez: " + tmp.name;
+      resultCategory.textContent = "";
+      resultIcon.textContent = "🎲";
+      count++;
+      if (count >= maxCycles) {
+        clearInterval(interval);
+        // resultado final
+        const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+        lastSuggestedRecipe = chosen;
+        const info = getCategoryAndIcon(chosen);
+        resultTitle.textContent = "Plato sugerido: " + chosen.name;
+        resultCategory.textContent = "Categoría: " + info.category;
+        resultIcon.textContent = info.icon;
+        resultMessage.textContent = "";
+        suggestBtn.disabled = false;
+        updateFavButton();
+      }
+    }, 80);
+
   } catch (err) {
     console.error(err);
-    resultEl.textContent = "Error al buscar platos :(";
+    resultMessage.textContent = "Error al buscar platos :(";
   }
 });
 
-
-
+// ----- init -----
+loadFavorites();
+updateFavButton();
