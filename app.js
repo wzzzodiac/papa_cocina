@@ -322,7 +322,13 @@ themeToggle.addEventListener("click", () => {
 
 applyTheme();
 
+
+
 // ===== IA: FRONTEND (Cloud Function callable) =====
+
+const AI_ENDPOINT = "https://aitips-vwj5ubuoza-uc.a.run.app";
+
+
 async function askAi(mode) {
   if (!lastSuggestedRecipe) {
     aiBlock.hidden = false;
