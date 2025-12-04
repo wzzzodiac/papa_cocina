@@ -220,3 +220,10 @@ button:active {
 .fav-item:hover {
     color: #2ecc71;
 }
+
+.fav-active {
+  background-color: gold !important;
+  color: black !important;
+  border: 2px solid #cc9a00 !important;
+}
+
