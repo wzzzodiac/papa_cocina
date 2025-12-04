@@ -105,7 +105,7 @@ suggestBtn.addEventListener("click", async () => {
 
 
 
-
+/*
 // ------- SOLO PARA RELLENAR LA BD UNA VEZ --------
 window.seedRecipes = async function () {
   const platos = [
@@ -171,4 +171,4 @@ window.seedRecipes = async function () {
 
   console.log("✔ LISTO — 50 platos añadidos a Firebase");
 };
-// ------- FIN SEED --------
+// ------- FIN SEED -------- 
