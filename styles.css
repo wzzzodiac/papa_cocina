@@ -30,25 +30,44 @@ input {
   width: 100%;
   padding: 12px;
   margin-top: 10px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+  border-radius: 10px;
+  border: 1px solid #e0c9a7;
   font-size: 1rem;
+  background: #fffdf7;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
 }
 
+input:focus {
+  outline: none;
+  border-color: #f4a261;
+  background: #fffaf2;
+  box-shadow: 0 0 0 3px rgba(244,162,97,0.35);
+}
+
+
+
 button {
-  margin-top: 10px;
+  margin-top: 12px;
   padding: 12px;
   width: 100%;
   font-size: 1rem;
-  border-radius: 8px;
+  border-radius: 10px;
   border: none;
-  background: #4caf50;
+  background: #2e7d32;
   color: white;
   cursor: pointer;
+  transition: background .12s ease, transform .1s ease, box-shadow .1s ease;
 }
 
 button:hover {
-  background: #43a047;
+  background: #2b6f2d;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 #result {
