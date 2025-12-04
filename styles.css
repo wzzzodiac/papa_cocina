@@ -227,3 +227,36 @@ button:active {
   border: 2px solid #cc9a00 !important;
 }
 
+.result-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #fffdf5;
+  border: 1px dashed #e0c9a7;
+}
+
+/* botón de favoritos pequeñito, no ocupa todo el ancho */
+.fav-btn {
+  width: auto;
+  margin-top: 0;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #ffe3e3;
+  color: #c62828;
+  font-size: 14px;
+  box-shadow: none;
+}
+
+.fav-btn:hover {
+  background: #ffcdd2;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+.fav-btn.fav-on {
+  background: #e53935;
+  color: #fff;
+}
+
