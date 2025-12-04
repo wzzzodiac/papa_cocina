@@ -267,3 +267,4 @@ suggestBtn.addEventListener("click", async () => {
 // =======================
 loadFavorites();
 updateFavButton();
+
