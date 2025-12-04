@@ -258,3 +258,31 @@ function mostrarPlatoSugerido(nombre, categoria, animar = false) {
         </div>
     `;
 }
+
+function toggleFavorite(recipeName) {
+  const favs = new Set(JSON.parse(localStorage.getItem("favorites") || "[]"));
+
+  if (favs.has(recipeName)) {
+    favs.delete(recipeName); // quitar
+  } else {
+    favs.add(recipeName); // agregar
+  }
+
+  localStorage.setItem("favorites", JSON.stringify([...favs]));
+  updateFavButton();
+}
+
+function updateFavButton() {
+  const favs = new Set(JSON.parse(localStorage.getItem("favorites") || "[]"));
+
+  if (!lastSuggestedRecipe) return;
+
+  if (favs.has(lastSuggestedRecipe.name)) {
+    favBtn.textContent = "★ Quitar de favoritos";
+    favBtn.classList.add("fav-active");
+  } else {
+    favBtn.textContent = "☆ Añadir a favoritos";
+    favBtn.classList.remove("fav-active");
+  }
+}
+
