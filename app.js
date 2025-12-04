@@ -275,8 +275,14 @@ suggestBtn.addEventListener("click", async () => {
         resultIcon.textContent = info.icon;
         resultMessage.textContent = "";
 
+        aiBlock.hidden = true;
+        aiOutput.textContent = "";
+        
         suggestBtn.disabled = false;
         updateFavButton();
+
+
+
       }
     }, 80);
   } catch (err) {
