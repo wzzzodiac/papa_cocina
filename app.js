@@ -319,15 +319,12 @@ applyTheme();
 
 
 
-// ===== IA: FRONTEND (Cloud Function callable) =====
+// ===== IA: FRONTEND =====
 
-// Usa la URL HTTP de tu Cloud Function
+// URL de tu función 2ª gen
 const AI_ENDPOINT = "https://aitips-vwj5ubuoza-uc.a.run.app";
 
-/**
- * Llamar a la IA para el plato sugerido.
- * mode: "tips" o "video"
- */
+// función genérica para llamar a la IA
 async function callAi(mode) {
   if (!lastSuggestedRecipe) {
     aiBlock.hidden = false;
@@ -336,8 +333,7 @@ async function callAi(mode) {
   }
 
   aiBlock.hidden = false;
-  aiOutput.textContent =
-    `Consultando a la IA para "${lastSuggestedRecipe.name}"...`;
+  aiOutput.textContent = `Consultando a la IA para "${lastSuggestedRecipe.name}"...`;
 
   try {
     const res = await fetch(AI_ENDPOINT, {
@@ -345,37 +341,31 @@ async function callAi(mode) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         dishName: lastSuggestedRecipe.name,
-        mode: mode
-      })
+        mode: mode,   // "tips" o "video"
+      }),
     });
 
     if (!res.ok) {
-      throw new Error("HTTP " + res.status);
+      throw new Error("Respuesta no OK: " + res.status);
     }
 
     const data = await res.json();
-    // en el backend devolvemos { text: "..." }
-    aiOutput.textContent =
-      data.text || data.tips || "La IA respondió pero no mandó texto.";
+    aiOutput.textContent = data.text || "La IA respondió pero sin texto 🤔";
   } catch (err) {
     console.error("Error llamando a la IA:", err);
-    aiOutput.textContent =
-      "La IA está ocupada ahora mismo 😅 (" + err.message + "). Intenta otra vez.";
+    aiOutput.textContent = "La IA está ocupada ahora mismo 😅. Intenta otra vez.";
   }
 }
 
-// botones IA
-if (aiTipsBtn) {
-  aiTipsBtn.addEventListener("click", () => {
-    callAi("tips");
-  });
-}
+// Eventos de los botones IA
+aiTipsBtn.addEventListener("click", () => {
+  callAi("tips");
+});
 
-if (aiVideoBtn) {
-  aiVideoBtn.addEventListener("click", () => {
-    callAi("video");
-  });
-}
+aiVideoBtn.addEventListener("click", () => {
+  callAi("video");
+});
+
 
 // =======================
 //  init
