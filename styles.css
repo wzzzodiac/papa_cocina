@@ -379,4 +379,74 @@ body.dark input {
     transform: scale(1.14);
 }
 
+/* ===== Bloque de IA ===== */
+
+.ai-block {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 253, 245, 0.95);
+  border: 1px dashed #e0c9a7;
+}
+
+.ai-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.ai-btn {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  background: #f4a261;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: background 0.15s ease, transform 0.1s ease,
+    box-shadow 0.1s ease;
+}
+
+.ai-btn.secondary {
+  background: #457b9d;
+}
+
+.ai-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.ai-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.ai-output {
+  font-size: 13px;
+  color: #5a4630;
+  white-space: pre-line;
+}
+
+/* Dark mode para el bloque de IA */
+body.dark .ai-block {
+  background: #2a2a2a;
+  border-color: #555;
+}
+
+body.dark .ai-output {
+  color: #f0f0f0;
+}
+
+body.dark .ai-btn {
+  background: #ffb366;
+  color: #222;
+}
+
+body.dark .ai-btn.secondary {
+  background: #6fb1ff;
+}
+
 
