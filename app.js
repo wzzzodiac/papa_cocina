@@ -101,3 +101,74 @@ suggestBtn.addEventListener("click", async () => {
     resultEl.textContent = "Error al buscar platos :(";
   }
 });
+
+
+
+
+
+// ------- SOLO PARA RELLENAR LA BD UNA VEZ --------
+window.seedRecipes = async function () {
+  const platos = [
+    ["Ají de gallina","pollo, papa, arroz"],
+    ["Lomo saltado","carne, cebolla, tomate"],
+    ["Seco de res","carne, culantro, arroz"],
+    ["Seco de pollo","pollo, culantro, arroz"],
+    ["Cau cau","mondongo, papa, arroz"],
+    ["Carapulcra","papa seca, cerdo, mani"],
+    ["Arroz con pollo","pollo, arroz, culantro"],
+    ["Arroz chaufa","arroz, pollo, huevo"],
+    ["Tallarín saltado","fideos, carne"],
+    ["Tallarín verde","fideos, espinaca, queso"],
+    ["Tallarín rojo","fideos, pollo, tomate"],
+    ["Papa a la huancaína","papa, queso, huacatay"],
+    ["Ocopa","papa, huacatay, mani"],
+    ["Estofado de pollo","pollo, papa, zanahoria"],
+    ["Pollo al horno","pollo, papa, especias"],
+    ["Albóndigas en salsa","carne molida, tomate, arroz"],
+    ["Picante de carne","carne, papa, aji"],
+    ["Chanfainita","bofe, papa, arroz"],
+    ["Sudado de pescado","pescado, tomate, cebolla"],
+    ["Cau cau de pollo","pollo, papa, aji"],
+    ["Ceviche","pescado, limón, cebolla"],
+    ["Arroz con mariscos","mariscos, arroz"],
+    ["Chicharrón de pescado","pescado, harina"],
+    ["Jalea","pescado, mariscos, fritura"],
+    ["Parihuela","mariscos, pescado, caldo"],
+    ["Choritos a la chalaca","choros, cebolla, tomate"],
+    ["Sudado de mariscos","mariscos, tomate, cebolla"],
+    ["Pulpo al olivo","pulpo, aceituna"],
+    ["Tiradito","pescado, limón, ají"],
+    ["Causa de atún","atún, papa"],
+    ["Sopa wantán","pollo, fideos, verduras"],
+    ["Aguadito de pollo","pollo, arroz, culantro"],
+    ["Caldo de gallina","gallina, fideos, huevo"],
+    ["Chupe de camarones","camarones, leche, arroz"],
+    ["Inchicapi","pollo, mani, yuca"],
+    ["Sancochado","carne, papa, verduras"],
+    ["Menestrón","fideos, frejoles, verduras"],
+    ["Shámbar","trigo, pellejo, menestra"],
+    ["Juane","pollo, arroz, hoja"],
+    ["Tacacho con cecina","platano, cecina"],
+    ["Patacones","platano, fritura"],
+    ["Adobo arequipeño","cerdo, chicha, aji"],
+    ["Picante a la tacneña","carne, papa"],
+    ["Qapchi","queso, papa, huacatay"],
+    ["Cuy chactado","cuy, fritura"],
+    ["Pachamanca","carne, hierbas"],
+    ["Arroz tapado","carne molida, arroz"],
+    ["Majado de yuca","yuca, cerdo"],
+    ["Tortilla de verduras","huevo, verduras"],
+    ["Pollo saltado","pollo, cebolla, tomate"]
+  ];
+
+  for (const [name, ing] of platos) {
+    await addDoc(recipesCol, {
+      name,
+      ingredients: ing.split(",").map(x => x.trim().toLowerCase())
+    });
+    console.log("Añadido:", name);
+  }
+
+  console.log("✔ LISTO — 50 platos añadidos a Firebase");
+};
+// ------- FIN SEED --------
