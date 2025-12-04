@@ -1,21 +1,29 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 24px;
   font-family: system-ui;
-  background: #f5f6f7;
+  background: radial-gradient(circle at top left, #ffe8c7 0, #fdf3e3 40%, #f7e0c2 100%);
 }
 
+
 .container {
-  max-width: 500px;
+  max-width: 550px;
   margin: 0 auto;
 }
 
+
 .box {
-  background: white;
-  padding: 16px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px #0001;
-  margin-top: 20px;
+  background: #fff7eb; /* crema suave */
+  padding: 18px 18px 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+  transition: transform .15s ease, box-shadow .15s ease;
 }
 
 input {
@@ -52,9 +60,15 @@ button:hover {
 h1 {
   text-align: center;
   margin: 0 0 24px 0;
+  font-size: 2.4rem;
 }
 
 .box + .box {
-  margin-top: 20px;
+  margin-top: 22px;
+}
+
+.box:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 16px 35px rgba(0,0,0,0.10);
 }
 
