@@ -286,8 +286,8 @@ suggestBtn.addEventListener("click", async () => {
         resultMessage.textContent = "";
 
         // reset bloque IA cuando hay nuevo plato
-        aiBlock.hidden = true;
-        aiOutput.textContent = "";
+        aiBlock.hidden = false;
+        aiOutput.textContent = "Haz clic en un botón de IA para ver tips o videos.";
 
         suggestBtn.disabled = false;
         updateFavButton();
