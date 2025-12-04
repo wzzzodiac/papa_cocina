@@ -260,3 +260,26 @@ button:active {
   color: #fff;
 }
 
+.fav-li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  padding: 4px 0;
+}
+
+.fav-remove {
+  margin-left: auto;
+  border: none;
+  background: transparent;
+  color: #b07a4a;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0 4px;
+}
+
+.fav-remove:hover {
+  color: #e53935;
+}
+
+
