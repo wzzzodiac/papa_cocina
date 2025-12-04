@@ -23,9 +23,13 @@ body.dark {
 body.dark::before {
   content: "";
   position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8); /* cambia opacidad aquí */
   z-index: -1;
+  pointer-events: none; /* por si acaso */
 }
 
 
