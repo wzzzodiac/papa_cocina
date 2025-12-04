@@ -9,21 +9,47 @@ body {
   padding: 24px;
   font-family: system-ui;
   background: radial-gradient(circle at top left, #ffe8c7 0, #fdf3e3 40%, #f7e0c2 100%);
+  opacity: 0;
+  animation: fadeIn .5s ease-out forwards;
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 .container {
   max-width: 550px;
   margin: 0 auto;
 }
 
+h1 {
+  text-align: center;
+  margin: 0 0 24px 0;
+  font-size: 2.4rem;
+}
 
 .box {
-  background: #fff7eb; /* crema suave */
+  background: #fff7eb;
   padding: 18px 18px 20px;
   border-radius: 16px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.06);
   transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.box + .box {
+  margin-top: 22px;
+}
+
+.box:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 16px 35px rgba(0,0,0,0.10);
 }
 
 input {
@@ -43,8 +69,6 @@ input:focus {
   background: #fffaf2;
   box-shadow: 0 0 0 3px rgba(244,162,97,0.35);
 }
-
-
 
 button {
   margin-top: 12px;
@@ -70,24 +94,87 @@ button:active {
   box-shadow: none;
 }
 
-#result {
-  margin-top: 12px;
-  font-weight: bold;
+/* RESULTADO CON ICONO + TEXTO */
+
+.result-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #fffdf5;
+  border: 1px dashed #e0c9a7;
 }
 
-/* Título centrado y con espacio abajo */
-h1 {
-  text-align: center;
-  margin: 0 0 24px 0;
-  font-size: 2.4rem;
+.result-icon {
+  font-size: 26px;
 }
 
-.box + .box {
-  margin-top: 22px;
+.result-texts {
+  flex: 1;
 }
 
-.box:hover {
-  transform: translateY(-3px) scale(1.01);
-  box-shadow: 0 16px 35px rgba(0,0,0,0.10);
+.result-title {
+  font-weight: 600;
+  font-size: 14px;
 }
 
+.result-category {
+  font-size: 12px;
+  color: #8a6d3b;
+  margin-top: 2px;
+}
+
+.result-message {
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+/* BOTÓN FAVORITO */
+
+.fav-btn {
+  width: auto;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: #ffe3e3;
+  color: #c62828;
+  font-size: 16px;
+  box-shadow: none;
+}
+
+.fav-btn:hover {
+  background: #ffcdd2;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+.fav-btn.fav-on {
+  background: #e53935;
+  color: #fff;
+}
+
+/* LISTA DE FAVORITOS */
+
+.fav-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 8px 0 0 0;
+}
+
+.fav-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  padding: 4px 0;
+}
+
+.fav-list .fav-li-icon {
+  font-size: 18px;
+}
+
+.fav-empty {
+  font-size: 13px;
+  color: #8a6d3b;
+  margin-top: 4px;
+}
