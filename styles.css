@@ -15,6 +15,16 @@ body {
   animation: fadeIn 0.5s ease-out forwards;
 }
 
+body.dark::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);  /* oscurece la imagen */
+  z-index: -1;                  /* detrás del contenido */
+  backdrop-filter: brightness(70%);
+}
+
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -243,51 +253,82 @@ button:active {
 }
 
 /* ===========================
-   📌 DARK MODE
+   🌙 MODO OSCURO REAL
    ===========================*/
+
 body.dark {
-  background: #1d1d1d !important;
-  color: #fcefdc;
+  background: rgba(0,0,0,0.85);   /* Capa negra */
+  color: #f5f5f5 !important;      /* Texto general */
 }
 
+/* Tarjetas (box) */
 body.dark .box {
-  background: #2a2a2a;
-  color: #fcefdc;
-  border: 1px solid #3d3d3d;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  background: rgba(25,25,25,0.9);
+  color: #f5f5f5;
+  border: 1px solid #444;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.6);
 }
 
+/* Inputs */
 body.dark input {
   background: #333;
-  border: 1px solid #555;
+  border: 1px solid #666;
   color: #fff;
+}
+
+body.dark input::placeholder {
+  color: #bbb;
 }
 
 body.dark input:focus {
-  border-color: #ffa75a;
-  box-shadow: 0 0 0 3px rgba(255, 154, 54, 0.4);
+  border-color: #71c2ff;
+  box-shadow: 0 0 0 3px rgba(113, 194, 255, 0.35);
 }
 
+/* Resultado del plato */
 body.dark .result-block {
   background: #2a2a2a;
+  color: #fff;
   border-color: #555;
 }
 
+body.dark .result-block span {
+  color: #ddd;
+}
+
+/* Favoritos */
 body.dark .fav-li {
   background: #333;
   color: #fff;
+  border-color: #444;
 }
 
 body.dark .fav-li:hover {
   background: #444;
 }
 
+body.dark .fav-remove {
+  color: #ff8b8b;
+}
+
+/* Botón de favorito */
 body.dark .fav-btn {
   background: #444;
-  color: #ff9999;
+  color: #ff9aa2;
 }
 
 body.dark .fav-btn.fav-on {
-  background: #cc3333;
+  background: #c33636;
   color: #fff;
 }
+
+/* Botón de tema */
+body.dark .theme-toggle {
+  background: #333;
+  color: #f1f1f1;
+}
+
+body.dark .theme-toggle:hover {
+  background: #444;
+}
+
