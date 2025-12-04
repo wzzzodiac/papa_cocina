@@ -9,6 +9,7 @@ import {
   addDoc,
   getDocs
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
 
 // =======================
 //  Config de Firebase
@@ -26,6 +27,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const recipesCol = collection(db, "recipes");
+const functions = getFunctions(app);
+const aiTipsFn = httpsCallable(functions, "aiTips");
 
 // =======================
 //  DOM
@@ -368,6 +371,47 @@ aiVideoBtn.addEventListener("click", () => {
   const url = `https://www.youtube.com/results?search_query=${q}`;
   window.open(url, "_blank");
 });
+
+async function askAi(mode) {
+  // 1) Validar que haya un plato sugerido
+  if (!lastSuggestedRecipe) {
+    aiBlock.hidden = false;
+    aiOutput.textContent = "Primero deja que te sugiera un plato 😉";
+    return;
+  }
+
+  // 2) Mostrar el bloque IA y mensaje de carga
+  aiBlock.hidden = false;
+  aiOutput.textContent = "Consultando a la IA para \"" + lastSuggestedRecipe.name + "\"...";
+
+  try {
+    // 3) Llamar a la función de Firebase
+    const result = await aiTipsFn({
+      dishName: lastSuggestedRecipe.name,
+      mode: mode,          // "video" o "tips"
+    });
+
+    // 4) Mostrar respuesta
+    const text = result.data.text || "(Sin respuesta)";
+    aiOutput.textContent = text;
+  } catch (err) {
+    console.error("Error llamando a aiTips:", err);
+    aiOutput.textContent = "La IA está ocupada ahora mismo 😅. Intenta otra vez.";
+  }
+}
+
+if (aiVideoBtn) {
+  aiVideoBtn.addEventListener("click", () => {
+    askAi("video");
+  });
+}
+
+if (aiTipsBtn) {
+  aiTipsBtn.addEventListener("click", () => {
+    askAi("tips");
+  });
+}
+
 
 // =======================
 //  init
