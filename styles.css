@@ -7,7 +7,7 @@ body {
 
 .container {
   max-width: 500px;
-  margin: auto;
+  margin: 0 auto;
 }
 
 .box {
@@ -46,5 +46,15 @@ button:hover {
 #result {
   margin-top: 12px;
   font-weight: bold;
+}
+
+/* Título centrado y con espacio abajo */
+h1 {
+  text-align: center;
+  margin: 0 0 24px 0;
+}
+
+.box + .box {
+  margin-top: 20px;
 }
 
