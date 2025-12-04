@@ -327,7 +327,7 @@ const AI_ENDPOINT = "https://aitips-vwj5ubuoza-uc.a.run.app";
 // función genérica para llamar a la IA
 async function callAi(mode) {
   if (!lastSuggestedRecipe) {
-    aiBlock.hidden = false;
+    aiBlock.hidden = true;
     aiOutput.textContent = "Primero deja que te sugiera un plato 😉";
     return;
   }
