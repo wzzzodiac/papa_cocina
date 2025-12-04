@@ -356,3 +356,26 @@ body.dark input {
     color: #ffffff !important;
 }
 
+/* …tu CSS actual… */
+
+/* === ICONOS EN EL TÍTULO === */
+.title-with-icon-double {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    font-size: 2.4rem;
+}
+
+.title-icon {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    transition: transform 0.2s ease;
+}
+
+.title-icon:hover {
+    transform: scale(1.14);
+}
+
