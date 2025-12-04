@@ -10,33 +10,42 @@
 <body>
 
   <div class="container">
+  <h1>¿Qué cocinamos mañana?</h1>
 
-    <h1 style="
-    text-align:center;
-    font-size: 2.4rem;
-    margin-bottom: 30px;
-    margin-top: 20px;
-    font-weight: 700;">
-    ¿Qué cocinamos mañana?
-    </h1>
-
-     <!-- PRIMERO: Buscar plato -->
+  <!-- BUSCAR PLATO -->
   <div class="box">
     <h2>Buscar plato</h2>
-    <input id="filter" placeholder="Click en 'Sugerir Plato' para plato al azar o escribir ingredientes">
+    <input id="filter" placeholder="Click en 'Sugerir Plato' o menciona tus ingredientes.">
     <button id="suggestBtn">Sugerir plato</button>
-    <p id="result"></p>
+
+    <!-- Resultado con icono + fav -->
+    <div class="result-block" id="resultBlock" hidden>
+      <div class="result-icon" id="resultIcon">🍽️</div>
+      <div class="result-texts">
+        <div class="result-title" id="resultTitle"></div>
+        <div class="result-category" id="resultCategory"></div>
+      </div>
+      <button class="fav-btn" id="favBtn" title="Añadir a favoritos">♡</button>
+    </div>
+
+    <p id="resultMessage" class="result-message"></p>
   </div>
 
-  <!-- DESPUÉS: Añadir nuevo plato -->
+  <!-- AÑADIR PLATO -->
   <div class="box">
     <h2>Añadir nuevo plato</h2>
     <input id="name" placeholder="Nombre del plato (ej: Aji de gallina)">
-    <input id="ingredients" placeholder="Ingredientes (Opcional y separados por comas 'pollo, papa')">
+    <input id="ingredients" placeholder="Opcional: Ingredientes / palabras clave (pollo, papa)">
     <button id="addBtn">Añadir</button>
   </div>
-    
+
+  <!-- FAVORITOS -->
+  <div class="box">
+    <h2>Favoritos</h2>
+    <ul id="favoritesList" class="fav-list"></ul>
+    <p id="favoritesEmpty" class="fav-empty">Todavía no has marcado ningún favorito.</p>
   </div>
+</div>
 
   <script type="module" src="app.js"></script>
 </body>
