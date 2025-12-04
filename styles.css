@@ -19,9 +19,8 @@ body.dark::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.55);  /* oscurece la imagen */
+  background: rgba(0,0,0,0.6);  /* oscurece la imagen */
   z-index: -1;                  /* detrás del contenido */
-  backdrop-filter: brightness(70%);
 }
 
 
@@ -334,35 +333,35 @@ body.dark .theme-toggle:hover {
 
 /* ----- TEXTOS MODO OSCURO ----- */
 
-body.dark-mode {
+body.dark {
     color: #f1f1f1 !important;
 }
 
-body.dark-mode h1,
-body.dark-mode h2,
-body.dark-mode h3,
-body.dark-mode h4,
-body.dark-mode h5,
-body.dark-mode h6,
-body.dark-mode .title,
-body.dark-mode .section-title {
+body.dark h1,
+body.dark h2,
+body.dark h3,
+body.dark h4,
+body.dark h5,
+body.dark h6,
+body.dark .title,
+body.dark .section-title {
     color: #ffffff !important;
     text-shadow: 0 0 4px rgba(255,255,255,0.2);
 }
 
 /* textos dentro de cajas */
-body.dark-mode .section,
-body.dark-mode .favorite-item,
-body.dark-mode label,
-body.dark-mode p,
-body.dark-mode span,
-body.dark-mode .result-title,
-body.dark-mode .result-category {
+body.dark .section,
+body.dark .favorite-item,
+body.dark label,
+body.dark p,
+body.dark span,
+body.dark .result-title,
+body.dark .result-category {
     color: #e6e6e6 !important;
 }
 
 /* inputs */
-body.dark-mode input {
+body.dark input {
     color: #ffffff !important;
 }
 
