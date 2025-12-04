@@ -321,10 +321,14 @@ applyTheme();
 
 // ===== IA: FRONTEND (Cloud Function callable) =====
 
+// Usa la URL HTTP de tu Cloud Function
 const AI_ENDPOINT = "https://aitips-vwj5ubuoza-uc.a.run.app";
 
-
-async function askAi(mode) {
+/**
+ * Llamar a la IA para el plato sugerido.
+ * mode: "tips" o "video"
+ */
+async function callAi(mode) {
   if (!lastSuggestedRecipe) {
     aiBlock.hidden = false;
     aiOutput.textContent = "Primero deja que te sugiera un plato 😉";
@@ -333,7 +337,7 @@ async function askAi(mode) {
 
   aiBlock.hidden = false;
   aiOutput.textContent =
-    'Consultando a la IA para "' + lastSuggestedRecipe.name + '"...';
+    `Consultando a la IA para "${lastSuggestedRecipe.name}"...`;
 
   try {
     const res = await fetch(AI_ENDPOINT, {
@@ -341,35 +345,35 @@ async function askAi(mode) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         dishName: lastSuggestedRecipe.name,
-        mode: mode // "video" o "tips"
+        mode: mode
       })
     });
 
     if (!res.ok) {
-      throw new Error("HTTP status " + res.status);
+      throw new Error("HTTP " + res.status);
     }
 
     const data = await res.json();
-    // En tu Cloud Function devolvemos { text: "..." }
-    const text = data.text || data.tips || "(Sin respuesta de la IA)";
-    aiOutput.textContent = text;
-  } catch (err) {
-    console.error("Error llamando a aiTips:", err);
+    // en el backend devolvemos { text: "..." }
     aiOutput.textContent =
-      "La IA está ocupada ahora mismo 😅. Intenta otra vez.";
+      data.text || data.tips || "La IA respondió pero no mandó texto.";
+  } catch (err) {
+    console.error("Error llamando a la IA:", err);
+    aiOutput.textContent =
+      "La IA está ocupada ahora mismo 😅 (" + err.message + "). Intenta otra vez.";
   }
 }
 
-
+// botones IA
 if (aiTipsBtn) {
   aiTipsBtn.addEventListener("click", () => {
-    askAi("tips");
+    callAi("tips");
   });
 }
 
 if (aiVideoBtn) {
   aiVideoBtn.addEventListener("click", () => {
-    askAi("video");
+    callAi("video");
   });
 }
 
