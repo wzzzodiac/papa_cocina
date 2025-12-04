@@ -449,4 +449,32 @@ body.dark .ai-btn.secondary {
   background: #6fb1ff;
 }
 
+.ai-box {
+  margin-top: 12px;
+  background: rgba(255, 247, 235, 0.92);
+}
+
+.ai-output {
+  font-size: 0.95rem;
+  margin: 8px 0 10px;
+  color: #5a4630;
+}
+
+.ai-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.ai-actions button {
+  flex: 1;
+}
+
+/* Modo oscuro */
+body.dark .ai-box {
+  background: rgba(30, 30, 30, 0.95);
+}
+
+body.dark .ai-output {
+  color: #f1f1f1;
+}
 
