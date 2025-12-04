@@ -5,6 +5,14 @@
 }
 
 body {
+  background: url("https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1600&q=80");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  font-family: "Inter", sans-serif;
+}
+
+body {
   margin: 0;
   padding: 24px;
   font-family: system-ui;
